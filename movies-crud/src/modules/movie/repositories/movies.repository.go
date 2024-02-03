@@ -3,10 +3,10 @@ package movies_repository
 import "fmt"
 
 type Movie struct{
-	Id string `json:"Id"`
-	Isbn string `json"Isbn"`
-	Title string `json"Title"`
-	Director_Id string `json"Director_Id"`
+	Id string `json:"id"`
+	Isbn string `json:"isbn"`
+	Title string `json:"title"`
+	Director_Id string `json:"director_id"`
 }
 
 var movies []Movie

@@ -7,9 +7,9 @@ import (
 )
 
 type ICreateMovieServiceDTO struct{
-	Isbn string `json:"Isbn"`
-	Title string `json:"Title"`
-	Director_Id string `json:"Director_Id"`
+	Isbn string `json:"isbn"`
+	Title string `json:"title"`
+	Director_Id string `json:"director_id"`
 }
 
 func CreateMovieService(params *ICreateMovieServiceDTO) movies_repository.Movie{
