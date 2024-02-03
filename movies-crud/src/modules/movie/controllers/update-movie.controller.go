@@ -1,4 +1,4 @@
-package services
+package movies_controllers
 
 import "net/http"
 
