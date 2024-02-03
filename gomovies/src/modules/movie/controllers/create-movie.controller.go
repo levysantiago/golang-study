@@ -2,15 +2,15 @@ package movies_controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	movies_services "gomovies/src/modules/movie/services"
+	"log"
 	"net/http"
 )
 
 
 
 func CreateMovie(res http.ResponseWriter, req *http.Request){
-	var data movies_services.ICreateMovieServiceDTO
+	var data movies_services.CreateMovieServiceDTO
 
 	err := json.NewDecoder(req.Body).Decode(&data)
 	if err != nil {
@@ -23,7 +23,7 @@ func CreateMovie(res http.ResponseWriter, req *http.Request){
 	var jsonResponse, jsonError = json.Marshal(movie)
 
 	if jsonError != nil {
-		fmt.Println("Unable to encode JSON")
+		log.Fatal("Unable to encode JSON")
 	}
 
 	res.WriteHeader(http.StatusCreated)

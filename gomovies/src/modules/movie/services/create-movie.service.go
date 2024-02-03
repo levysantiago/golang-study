@@ -6,13 +6,13 @@ import (
 	"github.com/google/uuid"
 )
 
-type ICreateMovieServiceDTO struct{
+type CreateMovieServiceDTO struct{
 	Isbn string `json:"isbn"`
 	Title string `json:"title"`
 	Director_Id string `json:"director_id"`
 }
 
-func CreateMovieService(params *ICreateMovieServiceDTO) movies_repository.Movie{
+func CreateMovieService(params *CreateMovieServiceDTO) movies_repository.Movie{
 	id := uuid.New().String()
 
 
