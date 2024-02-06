@@ -2,12 +2,21 @@ package movies_controllers
 
 import (
 	"encoding/json"
+	movies_repository "gomovies/src/modules/movie/repositories"
 	movies_services "gomovies/src/modules/movie/services"
 	"log"
 	"net/http"
 )
 
+type CreateMovieResponseData struct{
+	Status string `json:"status"`
+	Data movies_repository.Movie `json:"data"`
+}
 
+type CreateMovieResponseError struct{
+	Status string `json:"status"`
+	ErrorMessage string `json:"error_message"`
+}
 
 func CreateMovie(res http.ResponseWriter, req *http.Request){
 	var data movies_services.CreateMovieServiceDTO
@@ -20,10 +29,23 @@ func CreateMovie(res http.ResponseWriter, req *http.Request){
 	
 	var movie = movies_services.CreateMovieService(&data)
 
-	var jsonResponse, jsonError = json.Marshal(movie)
+	var responseData CreateMovieResponseData
+	responseData.Status = "success"
+	responseData.Data = movie
+
+	var jsonResponse, jsonError = json.Marshal(responseData)
 
 	if jsonError != nil {
 		log.Fatal("Unable to encode JSON")
+		
+		var responseError CreateMovieResponseError
+		responseError.Status = "error"
+		responseError.ErrorMessage = "Internal server error"
+
+		jsonResponse, _ = json.Marshal(responseError)
+
+		res.Write(jsonResponse)
+		return
 	}
 
 	res.WriteHeader(http.StatusCreated)

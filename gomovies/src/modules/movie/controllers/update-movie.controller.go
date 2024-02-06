@@ -10,6 +10,16 @@ import (
 	"github.com/gorilla/mux"
 )
 
+type UpdateMovieResponseData struct{
+	Status string `json:"status"`
+	Data movies_repository.Movie `json:"data"`
+}
+
+type UpdateMovieResponseError struct{
+	Status string `json:"status"`
+	ErrorMessage string `json:"error_message"`
+}
+
 func UpdateMovie(res http.ResponseWriter, req *http.Request){
 	var data movies_repository.UpdateMovieDTO
 	
@@ -23,10 +33,23 @@ func UpdateMovie(res http.ResponseWriter, req *http.Request){
 
 	var movie = movies_services.UpdateMovie(id, &data)
 
-	var jsonResponse, jsonError = json.Marshal(movie)
+	var responseData UpdateMovieResponseData
+	responseData.Status = "success"
+	responseData.Data = movie
+
+	var jsonResponse, jsonError = json.Marshal(responseData)
 
 	if jsonError != nil{
 		log.Fatal("Unable to encode JSON")
+		
+		var responseError CreateMovieResponseError
+		responseError.Status = "error"
+		responseError.ErrorMessage = "Internal server error"
+
+		jsonResponse, _ = json.Marshal(responseError)
+
+		res.Write(jsonResponse)
+		return
 	}
 
 	res.WriteHeader(http.StatusOK)

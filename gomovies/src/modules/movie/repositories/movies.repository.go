@@ -1,7 +1,6 @@
 package movies_repository
 
 import (
-	"fmt"
 	"log"
 )
 
@@ -50,8 +49,9 @@ func Update(id string, data *UpdateMovieDTO) Movie{
 	movies[foundAtIndex].Isbn = data.Isbn
 	movies[foundAtIndex].Title = data.Title
 
-	fmt.Println(data)
-	fmt.Println(movies)
-
 	return movies[foundAtIndex]
+}
+
+func FindMany() []Movie{
+	return movies;
 }
