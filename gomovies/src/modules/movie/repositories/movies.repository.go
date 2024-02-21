@@ -1,6 +1,7 @@
 package movies_repository
 
 import (
+	"errors"
 	"log"
 )
 
@@ -20,6 +21,33 @@ type UpdateMovieDTO struct{
 
 func Create(newMovie Movie) {
 	movies = append(movies, newMovie)
+}
+
+func Delete(id string) (Movie, error) {
+	var moviesLen = len(movies)
+	if(moviesLen < 1){
+		err := errors.New("Movie not found")
+		var emptyMovie Movie
+		return emptyMovie, err
+	}
+	
+	var index = -1
+	for i:=0;i < moviesLen;i++ {
+		if(movies[i].Id == id){
+			index = i
+		}
+	}
+
+	if(index < 0){
+		err := errors.New("Movie not found")
+		var emptyMovie Movie
+		return emptyMovie, err
+	}
+
+	movie := movies[index]
+	movies = append(movies[:index], movies[index+1:]...)
+
+	return movie, nil
 }
 
 func FindById(id string) Movie{
