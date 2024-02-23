@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	movies_repository "gomovies/src/modules/movie/repositories"
 	movies_services "gomovies/src/modules/movie/services"
-	"log"
 	"net/http"
 )
 
@@ -34,8 +33,6 @@ func GetMovies(res http.ResponseWriter, req *http.Request){
 	jsonResponse, jsonError := json.Marshal(responseData)
 
 	if jsonError != nil {
-		log.Fatal("Failed to format movies JSON.")
-		
 		var responseError GetMoviesResponseError
 		responseError.Status = "error"
 		responseError.ErrorMessage = "Internal server error"

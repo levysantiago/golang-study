@@ -2,7 +2,6 @@ package movies_repository
 
 import (
 	"errors"
-	"log"
 )
 
 type Movie struct{
@@ -62,7 +61,7 @@ func FindById(id string) Movie{
 	return foundMovie
 }
 
-func Update(id string, data *UpdateMovieDTO) Movie{
+func Update(id string, data *UpdateMovieDTO) (Movie, error){
 	var foundAtIndex = -1
 	for i := 0; i < len(movies);i++ {
 		if(movies[i].Id == id){
@@ -71,13 +70,16 @@ func Update(id string, data *UpdateMovieDTO) Movie{
 	}
 
 	if(foundAtIndex < 0){
-		log.Fatal("Movie not found")
+		err := errors.New("Movie not found")
+		var emptyMovie Movie
+
+		return emptyMovie, err
 	}
 
 	movies[foundAtIndex].Isbn = data.Isbn
 	movies[foundAtIndex].Title = data.Title
 
-	return movies[foundAtIndex]
+	return movies[foundAtIndex], nil
 }
 
 func FindMany() []Movie{

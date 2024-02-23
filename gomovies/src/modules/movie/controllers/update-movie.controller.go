@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	movies_repository "gomovies/src/modules/movie/repositories"
 	movies_services "gomovies/src/modules/movie/services"
-	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -21,17 +20,29 @@ type UpdateMovieResponseError struct{
 }
 
 func UpdateMovie(res http.ResponseWriter, req *http.Request){
-	var data movies_repository.UpdateMovieDTO
+	var params movies_repository.UpdateMovieDTO
 	
 	var id = mux.Vars(req)["id"]
 
-	err := json.NewDecoder(req.Body).Decode(&data)
-	if err != nil {
-			http.Error(res, err.Error(), http.StatusBadRequest)
+	decodingError := json.NewDecoder(req.Body).Decode(&params)
+	if decodingError != nil {
+			http.Error(res, decodingError.Error(), http.StatusBadRequest)
 			return
 	}
 
-	var movie = movies_services.UpdateMovie(id, &data)
+	var movie, updateError = movies_services.UpdateMovie(id, &params)
+
+	if(updateError != nil){
+		var responseError CreateMovieResponseError
+		responseError.ErrorMessage = updateError.Error()
+		responseError.Status = "error"
+
+		jsonResponse, _ := json.Marshal(responseError)
+
+		res.WriteHeader(http.StatusBadRequest)
+		res.Write(jsonResponse)
+		return
+	}
 
 	var responseData UpdateMovieResponseData
 	responseData.Status = "success"
@@ -39,9 +50,7 @@ func UpdateMovie(res http.ResponseWriter, req *http.Request){
 
 	var jsonResponse, jsonError = json.Marshal(responseData)
 
-	if jsonError != nil{
-		log.Fatal("Unable to encode JSON")
-		
+	if(jsonError != nil){
 		var responseError CreateMovieResponseError
 		responseError.Status = "error"
 		responseError.ErrorMessage = "Internal server error"

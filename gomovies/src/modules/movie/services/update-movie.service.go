@@ -2,6 +2,6 @@ package movies_services
 
 import movies_repository "gomovies/src/modules/movie/repositories"
 
-func UpdateMovie(id string, data *movies_repository.UpdateMovieDTO) movies_repository.Movie{
+func UpdateMovie(id string, data *movies_repository.UpdateMovieDTO) (movies_repository.Movie, error){
 	return movies_repository.Update(id, data)
 }
