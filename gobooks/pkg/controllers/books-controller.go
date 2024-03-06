@@ -63,3 +63,32 @@ func DeleteBook(res http.ResponseWriter, req *http.Request){
 	res.WriteHeader(http.StatusOK)
 	res.Write(data)
 }
+
+func UpdateBook(res http.ResponseWriter, req *http.Request){
+	var updateBook = &models.Book{}
+
+	utils.ParseBody(req, updateBook)
+	vars := mux.Vars(req)	
+	bookId := vars["bookId"]
+	id, err := strconv.ParseInt(bookId, 0, 0)
+	if(err != nil){
+		fmt.Println("Error while parsing")
+	}
+	bookDetails, _ := models.GetBookById(id)
+	if(updateBook.Name != ""){
+		bookDetails.Name = updateBook.Name
+	}
+	if(updateBook.Author != ""){
+		bookDetails.Author = updateBook.Author
+	}
+	if(updateBook.Publication != ""){
+		bookDetails.Publication = updateBook.Publication
+	}
+
+	book := models.UpdateBook(id, *bookDetails)
+	
+	data, _ := json.Marshal(book)
+	res.Header().Set("Content-Type", "application/json")
+	res.WriteHeader(http.StatusOK)
+	res.Write(data)
+}

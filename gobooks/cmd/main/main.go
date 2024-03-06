@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -15,5 +16,6 @@ func main(){
 
 	http.Handle("/", router)
 
+	fmt.Println("Starting server at port 3333")
 	log.Fatal(http.ListenAndServe("localhost:3333", router))
 }
