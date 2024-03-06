@@ -1,11 +1,17 @@
-# Movies CRUD
+# Books CRUD
 
-A CRUD of Movies API with Golang.
+A CRUD of Books API with Golang and PostgreSQL.
 
 ## Versions
 
 Go version: 1.21.4
 Gorilla Mux: v1.8.1
+
+## Start the database instance
+
+```bash
+docker compose up -d
+```
 
 ## Run the project
 
